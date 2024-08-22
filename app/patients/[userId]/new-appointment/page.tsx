@@ -11,8 +11,11 @@ export default async function NewAppointment({params:{userId}}: SearchParamProps
     <div className="flex h-screen max-h-screen">      
       <section className="remove-scrollbar container my-auto"> 
         <div className="sub-container max-w-[860px] flex-1 justify-between">
-          <Link href="/">
-            <Image src="/assets/icons/logo-full.svg" alt="logo" width={1000} height={1000} className='mb-12 h-10 w-fit' />
+          <Link href="/">            
+            <div className='flex flex-wrap items-center'>
+              <Image src="/assets/icons/log.png" alt="logo" width={1000} height={1000} className='h-14 w-fit' />
+              <p className='text-[#24ae7c] font-extrabold text-lg'>Health Care</p>
+            </div>
           </Link>
             <AppointmentForm type='create' userId={userId} patientId={patient.$id}/> 
             <div className="text-14-regular mt-20 flex justify-between">

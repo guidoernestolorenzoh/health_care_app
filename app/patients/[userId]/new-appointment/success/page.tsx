@@ -15,7 +15,11 @@ const Success = async ({params: {userId}, searchParams}: SearchParamProps) => {
     <div className="flex h-screen max-h-screen px-[5%]">
       <div className='success-img'>
         <Link href="/">
-          <Image src="/assets/icons/logo-full.svg" alt="logo" width={1000} height={1000} className='h-10' />
+          {/* <Image src="/assets/icons/logo-full.svg" alt="logo" width={1000} height={1000} className='h-10' /> */}
+          <div className='flex flex-wrap items-center'>
+            <Image src="/assets/icons/log.png" alt="logo" width={1000} height={1000} className='h-14 w-fit' />
+            <p className='text-[#24ae7c] font-extrabold text-lg'>Health Care</p>
+          </div>
         </Link>
         <section className='flex flex-col items-center'>
           <Image src="/assets/icons/check-circle.svg" alt="success" className='mt-14 mx-auto' width={100} height={100} />          

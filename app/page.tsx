@@ -11,8 +11,11 @@ export default function Home({searchParams}: SearchParamProps) {
       {isAdmin && <PassKeyModal />}
       
       <section className="remove-scrollbar container my-auto"> 
-        <div className="sub-container max-w-[496px]">
-          <Image src="/assets/icons/logo-full.svg" alt="logo" width={1000} height={1000} className='mb-12 h-10 w-fit' />
+        <div className="sub-container max-w-[496px]">          
+          <div className='flex flex-wrap items-center'>
+            <Image src="/assets/icons/log.png" alt="logo" width={1000} height={1000} className='h-14 w-fit' />
+            <p className='text-[#24ae7c] font-extrabold text-lg'>Health Care</p>
+          </div>
 
           <PatientForm />
           <div className="text-14-regular mt-20 flex justify-between">
@@ -25,10 +28,11 @@ export default function Home({searchParams}: SearchParamProps) {
           </div>
         </div>
       </section>
-      {/* <Image src="/assets/images/onboarding-img.png" alt="onboarding"  */}
-      {/* <Image src="/assets/images/group_doctos.jpeg" alt="onboarding"  */}
-      <Image src="/assets/images/doctor3.jpeg" alt="onboarding" 
+      {/* <Image src="/assets/images/onboarding-img.png" alt="onboarding"  */}     
+      <Image src="/assets/images/onBoarding.webp" alt="onboarding" 
       width={1000} height={1000} className='side-img max-w-[50%]' />
+      {/* <Image src="/assets/images/doctor3.jpeg" alt="onboarding" 
+      width={1000} height={1000} className='side-img max-w-[40%]' /> */}
     </div>
   )
 }
