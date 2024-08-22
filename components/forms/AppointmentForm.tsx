@@ -20,10 +20,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import { scheduler } from "timers/promises";
 import { createAppointment } from "@/lib/actions/appointment.actions";
 import { get } from "http";
-export const AppointmentForm = ({type, userId, patientId}: {
+import { Appointment } from "@/types/appwrite.types";
+
+
+export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}: {
   type: "create" | "cancel" | "schedule";
   userId: string;
   patientId: string;
+  appointment?: Appointment;
+  setOpen?: (open: boolean) => void;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
