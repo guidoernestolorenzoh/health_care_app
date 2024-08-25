@@ -58,11 +58,11 @@ const AppointmentModal = ({
             setOpen={setOpen}
         />
 
-        <DialogFooter>
+        {/* <DialogFooter>
           <Button type="submit" className="shad-primary-btn mx-auto w-full">
             Schedule appointment
           </Button>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

@@ -18,7 +18,7 @@ import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import "react-datepicker/dist/react-datepicker.css";
 import { scheduler } from "timers/promises";
-import { createAppointment } from "@/lib/actions/appointment.actions";
+import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions";
 import { get } from "http";
 import { Appointment } from "@/types/appwrite.types";
 
@@ -38,11 +38,11 @@ export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}:
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: "",
-      reason: "",
-      note: "",
-      schedule: new Date(),
-      cancellationReason: "",
+      primaryPhysician: appointment ? appointment.primaryPhysician : "",
+      schedule: appointment ? new Date(appointment?.schedule) : new Date(Date.now()),
+      reason: appointment?.reason || "",
+      note: appointment?.note || "",
+      cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
@@ -82,7 +82,24 @@ export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}:
         }
         
       } else {
-        // await updateUser(userId, values);
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment:{            
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,            
+          }, 
+          type,
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Add the missing timeZone property
+        };
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        
+        if (updatedAppointment) {
+          setOpen && setOpen(false);
+          form.reset();          
+        }
       }
     } catch (error) {
       console.log(error);
@@ -90,31 +107,29 @@ export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}:
 
     setIsLoading(false);
   };
-
   let buttonLabel;
 
   switch (type) {
-    case "create":
-      buttonLabel = "Create Appointment";
-      break;
     case "cancel":
       buttonLabel = "Cancel Appointment";
       break;
     case "schedule":
       buttonLabel = "Schedule Appointment";
       break;
-    default:
+    default:    
+      buttonLabel = "Create Appointment";
       break;
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
-        <section className="mb-12 space-y-4">
-          <h1 className="header">New Appointment</h1>
-          <p className="text-dark-700">Request a new appointment in 10 seconds</p>
-        </section>
-
+        {type === 'create' && 
+          <section className="mb-12 space-y-4">
+            <h1 className="header">New Appointment</h1>
+            <p className="text-dark-700">Request a new appointment in 10 seconds</p>
+          </section>
+        }
         {type !== "cancel" && (
           <>
             {/* PRIMARY CARE PHYSICIAN */}
@@ -141,21 +156,21 @@ export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}:
             ))}
           </CustomFormField>
 
-          <div className="flex flex-col gap-6 xl:flex-row">
+          <div className={`flex flex-col gap-6 ${type === "create" && "xl:flex-row"}`}>
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
               control={form.control}
               name="reason"
               label="Reason for appointment"
-              placeholder="ex. Annual checkup, follow-up appointment"
+              placeholder="ex. Annual checkup, follow-up appointment"              
             />
 
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
               control={form.control}
               name="note"
-              label="Additional comments/notes"
-              placeholder="ex: Prefer morning appointments, if possible"
+              label="Additional notes"
+              placeholder="ex: Prefer morning appointments, if possible"              
             />
           </div>
 
@@ -181,7 +196,10 @@ export const AppointmentForm = ({type, setOpen, userId, patientId, appointment}:
           />
         )}
 
-        <SubmitButton className={`${type === 'cancel' ? 'shad-danger-btn' : 'shad-primary-btn'} w-full`} isLoading={isLoading}>{buttonLabel}</SubmitButton>
+        <SubmitButton 
+          className={`${type === 'cancel' ? 'shad-danger-btn' : 'shad-primary-btn'} w-full`} 
+          isLoading={isLoading}>{buttonLabel}
+        </SubmitButton>
       </form>
     </Form>
   );
