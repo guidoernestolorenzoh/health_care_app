@@ -13,7 +13,7 @@ import { decryptKey, encryptKey } from '@/lib/utils'
 
 
 
-const PassKeyModal = () => {
+const PasskeyModal = () => {
     const router = useRouter();
     const [open, setOpen] = useState(true);
     const path = usePathname();
@@ -62,7 +62,7 @@ const PassKeyModal = () => {
                         To access the admin page, please enter the passkey...
                     </AlertDialogDescription>                    
                 </AlertDialogHeader>
-                <div className=''>
+                <div>
                 <InputOTP maxLength={6} value={passkey} onChange={(value) => setPasskey(value)}>
                     <InputOTPGroup className='shad-otp'>
                         <InputOTPSlot index={0} className='shad-otp-slot'/>
@@ -93,4 +93,4 @@ const PassKeyModal = () => {
     )
 }
 
-export default PassKeyModal
+export default PasskeyModal
